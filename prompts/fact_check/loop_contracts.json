@@ -1,0 +1,26 @@
+[
+  {
+    "contract_version": "fact-investigator-v1",
+    "path": "experiments/archive/prompts/fact_check/investigator_v1.draft.md",
+    "prompt_sha256": "788067ae167ad023ed21223d5a1fd4b396ffe16bbafee14dbab5c387b2c49a88",
+    "tools_sha256": "b9090886e561c431205c055fa83365c21908cd41287e98ae4facd12e0c745a98",
+    "verdict_schema_sha256": "05a61464abef7dba5ef7c298feb3afa0781c611d460fe59d83bcc878d88a6c17",
+    "approved_for_dev": false
+  },
+  {
+    "contract_version": "fact-investigator-v1",
+    "path": "prompts/fact_check/investigator_v1.md",
+    "prompt_sha256": "788067ae167ad023ed21223d5a1fd4b396ffe16bbafee14dbab5c387b2c49a88",
+    "tools_sha256": "b9090886e561c431205c055fa83365c21908cd41287e98ae4facd12e0c745a98",
+    "verdict_schema_sha256": "05a61464abef7dba5ef7c298feb3afa0781c611d460fe59d83bcc878d88a6c17",
+    "approved_for_dev": true
+  },
+  {
+    "contract_version": "fact-investigator-v1",
+    "path": "prompts/fact_check/investigator_v1_1.md",
+    "prompt_sha256": "71bad54cddb2754082cd55d356dff33a0bccd27ff572d98889a3f3011998999f",
+    "tools_sha256": "b9090886e561c431205c055fa83365c21908cd41287e98ae4facd12e0c745a98",
+    "verdict_schema_sha256": "05a61464abef7dba5ef7c298feb3afa0781c611d460fe59d83bcc878d88a6c17",
+    "approved_for_dev": true
+  }
+]

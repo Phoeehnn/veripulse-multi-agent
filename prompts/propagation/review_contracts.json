@@ -1,0 +1,13 @@
+[
+  {
+    "contract_version": "propagation-review-v1",
+    "path": "prompts/propagation/v1_m6c.md",
+    "prompt_sha256": "a07ea5f79fd2b6993e34ed4643d8eeeb8adc7383185cea2405448db1469bdf0a",
+    "tools_sha256": "18876c1ad66f2ac10736c5bc04aa31c9c3b952897b2637479d90a94de502bd01",
+    "schema_sha256": "d996713ba4ddeaa888db3bc711023a1b67766f2d210abb0e84f391c2f3178ac5",
+    "config_sha256": "5082f032e80943bad1b287742b81da93953f322c0722a80c519512506ed67d76",
+    "code_sha256": "ddc61a4e7fa75b2a03bdd1f2c1fc752d15c5bc4eb4a76bd489974cd1598a9810",
+    "approved_for_dev": true,
+    "approved_for_test": false
+  }
+]

@@ -1,0 +1,240 @@
+retrieval:
+  chunk_size: 300
+  chunk_overlap: 50
+  embedding_model: BAAI/bge-m3
+  embedding_batch_size: 8
+  embedding_use_fp16: false
+  collection_name: chef_evidence
+  vector_top_k: 10
+  bm25_top_k: 10
+  rrf_k: 60
+  final_top_k: 5
+  rerank_model: BAAI/bge-reranker-v2-m3
+  rerank_batch_size: 4
+  rerank_use_fp16: false
+  rerank_query_max_length: 256
+  rerank_passage_max_length: 512
+  rerank_candidate_k: 10
+  questions_per_label: 10
+  diversify_results: true
+  corpus: chef_dev_full
+propagation_tools:
+  comment_preview_chars: 80
+  sample_max_k: 10
+  search_max_k: 8
+  search_query_max_chars: 20
+  window_hours: [1, 6, 24]
+propagation_limits:
+  round1_max_steps: 4
+  round1_max_cost_cny: 0.08
+  sample_max_calls: 2
+  search_max_calls: 3
+  text_max_chars: 60
+  emotion_signal_max_items: 5
+  lead_max_items: 3
+propagation_harness:
+  input_estimate_version: json-chars-v1
+  input_bound_margin_tokens: 300
+  max_consecutive_tool_errors: 2
+  max_format_nudges: 1
+  max_steps: 4
+  max_tool_calls: {get_spread_stats: 1, sample_comments: 2, search_comments: 3}
+  token_budget_per_call: 12000
+  max_output_tokens: 1500
+  max_total_tokens: 60000
+  max_cost_cny: 0.08
+  final_token_reserve: 13500
+  tool_timeout_s: {get_spread_stats: 10, sample_comments: 30, search_comments: 30,
+                   submit_propagation_report: 10}
+  max_tool_result_chars: 1200
+agent:
+  no_citation_weight_factor: 0.5
+  citation_repair_retries: 1
+  single_validation_retries: 1  # 作者A：全题首次判断与引用修复共用一次结构修复
+fact_risk:
+  反驳: {base: 0.5, slope: 0.5}
+  支持: {base: 0.5, slope: -0.5}
+  信息不足: {base: 0.5, slope: 0.0}
+arbiter:
+  weights: {fact: 0.45, emotion: 0.20, spread: 0.20, compliance: 0.15}
+  level_map: {emotion: {低: 0.2, 中: 0.5, 高: 0.9}, spread: {低: 0.2, 中: 0.5, 高: 0.9}}
+  compliance_score: {checked_no_hit: 0.1, 中: 0.6, 高: 1.0}
+  thresholds: [0.35, 0.55, 0.75]
+  review_level: 3
+  compliance_high_min_level: 3
+case:
+  max_cost_cny: 0.60
+  plan: {fact_round1: 0.20, propagation_round1: 0.08, arbiter_decision: 0.05, action_pool: 0.17}
+  action_caps: {fact_investigate: 0.08, propagation_investigate: 0.05, propagation_review: 0.05}
+  final_decision_reserve: 0.05
+m4:
+  experiment_max_cost_cny: 0.50
+  case_budget:
+    max_cost_cny: 0.95
+    plan: {fact_round1: 0.36, propagation_round1: 0.08, arbiter_decision: 0.30, action_pool: 0.17}
+    action_caps: {fact_investigate: 0.08, propagation_investigate: 0.05, propagation_review: 0.05}
+    final_decision_reserve: 0.30
+  arbiter_harness:
+    input_estimate_version: json-chars-v1
+    input_bound_margin_tokens: 300
+    max_steps: 3
+    max_tool_calls: {}
+    token_budget_per_call: 50000
+    max_output_tokens: 3000
+    max_total_tokens: 120000
+    max_cost_cny: 0.30
+    final_token_reserve: 53000
+    tool_timeout_s: {submit_decision: 10}
+    max_tool_result_chars: 1200
+m5:
+  case_budget:
+    max_cost_cny: 1.45
+    plan: {fact_round1: 0.36, propagation_round1: 0.08, arbiter_decision: 0.30, action_pool: 0.36}
+    action_caps: {fact_investigate: 0.36, propagation_investigate: 0.36, propagation_review: 0.36}
+    final_decision_reserve: 0.30
+  arbiter_harness:
+    input_estimate_version: json-chars-v1
+    input_bound_margin_tokens: 300
+    max_steps: 3
+    max_tool_calls: {}
+    token_budget_per_call: 50000
+    max_output_tokens: 3000
+    max_total_tokens: 120000
+    max_cost_cny: 0.30
+    final_token_reserve: 53000
+    tool_timeout_s: {submit_decision: 10}
+    max_tool_result_chars: 1200
+m6c:
+  graph_recursion_limit: 20
+  case_budget:
+    max_cost_cny: 2.06
+    plan: {fact_round1: 0.36, propagation_round1: 0.08, arbiter_decision: 0.30, action_pool: 0.72}
+    action_caps: {fact_investigate: 0.36, propagation_investigate: 0.36, propagation_review: 0.36}
+    final_decision_reserve: 0.30
+  arbiter_harness:
+    input_estimate_version: json-chars-v1
+    input_bound_margin_tokens: 300
+    max_steps: 3
+    max_tool_calls: {}
+    token_budget_per_call: 50000
+    max_output_tokens: 3000
+    max_total_tokens: 120000
+    max_cost_cny: 0.30
+    final_token_reserve: 53000
+    tool_timeout_s: {submit_decision: 10}
+    max_tool_result_chars: 1200
+  collab:
+    max_actions: 2
+    targets: [fact, propagation]
+    review_enabled: true
+    generic_followup: false
+    investigation_plan:
+      max_text_chars: 60
+graph:
+  fact_node_version: v2
+  recursion_limit: 17
+  checkpointer: memory
+collab:
+  max_actions: 1
+  targets: [fact]
+  review_enabled: false
+  generic_followup: false
+  investigation_plan:
+    max_text_chars: 60
+fact_v2:
+  validation_sampling_seed: 42
+  limits:
+    max_key_facts: 6
+    max_key_fact_chars: 120
+    max_quotes_per_direction: 2
+    max_quotes_per_report: 12
+    min_normalized_quote_chars: 8
+    max_quote_chars: 80
+    max_reasons: 3
+    max_reason_chars: 120
+    quote_context_chars: 30
+    max_proposed_issues: 2
+    max_proposed_question_chars: 60
+scenario:
+  active: general
+disposition_profiles:
+  general:
+    system_failure: {反驳: 转人工处理, 信息不足: 转人工处理, 支持: 转人工处理}
+    "1": {反驳: 归档, 信息不足: 归档, 支持: 归档}
+    "2": {反驳: 持续观察 + 准备澄清材料（附证据来源）, 信息不足: 持续观察 + 人工补充核查, 支持: 持续观察}
+    "3": {反驳: 优先上报 + 建议发布澄清（附证据来源）, 信息不足: 优先上报 + 优先人工核查, 支持: 优先上报（事件属实，关注舆情走向）}
+    "4": {反驳: 紧急上报 + 建议发布澄清, 信息不足: 紧急上报 + 紧急人工核查, 支持: 紧急上报（事件属实，关注舆情走向）}
+  content_platform:
+    system_failure: {反驳: 转人工处理, 信息不足: 转人工处理, 支持: 转人工处理}
+    "1": {反驳: 不处理, 信息不足: 不处理, 支持: 不处理}
+    "2": {反驳: 加“信息待核实”标签, 信息不足: 加“信息待核实”标签, 支持: 不处理}
+    "3": {反驳: 加辟谣提示卡（附证据来源）＋建议人工评估是否降低推荐, 信息不足: 加“信息待核实”标签 + 优先人工核查, 支持: 不干预内容；标记为高关注事件，提示运营关注评论区}
+    "4": {反驳: 加辟谣提示卡 + 建议人工评估是否下架, 信息不足: 加“信息待核实”标签 + 紧急人工核查, 支持: 不干预内容；标记为高关注事件，紧急提示运营}
+disposition_suffix:
+  violation: 人工评估是否违规
+  unverified: 真实性未核实
+evidence_sources:
+  chef_dev: {index: chef_dev_full_chroma, coverage: full}
+  chef_test: {index: chef_test_full_chroma, coverage: full}
+  demo: {index: demo_chroma, coverage: demo}
+  ced: {index: null, coverage: none}
+  free_ticket: {index: chef_dev_full_chroma, coverage: mismatched}
+evaluation:
+  worker_wait_timeout_s: 180  # 作者批准E2总计划：上一后台任务有界等待，不等于工具超时
+  pilot_max_median_cost_cny: 0.10
+  pilot_max_no_valid_results: 2
+  pilot_max_reservation_exceeded: 0
+  max_run_cost_cny: 10  # 作者2026-10-14确认：两组共用整场上限；接线尚未完成
+  pilot_max_run_cost_cny: 2  # 试跑模式上限，运行参数只能进一步收紧
+  gold_review_path: results/2026-10-02_gold_review_b851f00e7adf4c17932e1bc04afc7c45.csv
+  fact_check_prompt_path: prompts/fact_check/v3.md  # 工作默认，未定稿
+  fact_check_counts:
+    真: 4
+    假: 3
+    无法判定: 3
+  acceptance_min_correct: 7
+  dataset_per_label: 20  # T2：新增开发题与留出题每类20；作者沿用文档参数
+  dev_sampling_seed: 42  # 作者于2026-10-05确认；只用于额外开发题抽样
+  retrieval_metrics_k: 10  # 设计文档E1：recall@10；倒数排名也按此范围记录
+cost:  # 元 / 百万 token；作者确认 2/8；按高峰未缓存费率保守估算，不等于账单
+  input_per_1m: 2
+  output_per_1m: 8
+policy:  # T3a：沿用 design.md §4/§5.2；这里只配置权限，不执行工具
+  allow:
+    fact_investigator: [search_evidence, read_evidence, load_skill, submit_verdict]
+    emotion: []
+    propagation_analyst: [get_spread_stats, sample_comments, search_comments, submit_propagation_report, submit_review]
+    arbiter: [submit_decision]
+    alert_gate: [dispatch_alert]
+  risk_tier:
+    search_evidence: R0
+    read_evidence: R0
+    load_skill: R0
+    submit_verdict: R0
+    get_spread_stats: R0
+    sample_comments: R0
+    search_comments: R0
+    submit_propagation_report: R0
+    submit_review: R0
+    submit_decision: R0
+    write_lesson_candidate: R1
+    dispatch_alert: R2
+  r2_mode: dry_run
+harness:  # T3b：作者确认 A；单位为单专家、单任务，收尾在总额度内
+  input_estimate_version: json-chars-v1  # Fix-2a：只估计messages与实际工具定义的JSON字符数，不保证token上界
+  input_bound_margin_tokens: 300  # 作者2026-10-14确认；循环接入在Fix-2b
+  repeat_query_limit: 2  # 作者2026-10-11确认：达到2提醒，提醒后再次触发转收尾
+  no_new_evidence_limit: 2  # 连续成功搜索无新增正文；达到2提醒，再触发收尾
+  max_consecutive_tool_errors: 2  # 连续实际工具error/timeout达到2停止
+  max_format_nudges: 1  # 作者2026-10-14确认：三类可恢复格式错误共用一次提醒
+  max_steps: 6
+  max_tool_calls: {search_evidence: 3, read_evidence: 6, load_skill: 2}
+  token_budget_per_call: 20000
+  max_output_tokens: 2000
+  max_total_tokens: 50000
+  max_cost_cny: 0.20
+  final_token_reserve: 22000
+  tool_timeout_s: {search_evidence: 180, read_evidence: 30, load_skill: 10, submit_verdict: 10}
+  search_k: 5  # T4b作者确认：一次搜索最多返回的片段数
+  gist_chars: 120  # 搜索预览字符数，不另调用模型生成摘要
+  max_tool_result_chars: 1200  # 完整工具payload的JSON字符数，含格式与截断说明

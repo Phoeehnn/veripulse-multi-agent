@@ -1,0 +1,12 @@
+[
+  {
+    "contract_version": "propagation-v1",
+    "path": "prompts/propagation/v1.md",
+    "prompt_sha256": "715cc189f1bc1f24e1fb573c6d52244ecec52018af4511ed1d9cf5dd936b3d02",
+    "tools_sha256": "10b4e26d0bdd05eb60de51b398d0e7b4e9778e71ea5bfeb61394f0c580ea1c8f",
+    "schema_sha256": "bcd53057e16b793d20f21bc12a979b7641ce9bc792d6345f35f850afd1d6993f",
+    "config_sha256": "9bcfb75528c82b75316d58712d2084856d6e18518088f08306e3880b669ec3d4",
+    "code_sha256": "014a242897ad4bb7a6ed31517280601230e6b91f2a377136668e37f672d0b317",
+    "approved_for_dev": true
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "contract_version": "arbiter-decision-v2",
+    "path": "prompts/arbiter/v2.md",
+    "prompt_sha256": "298cf72780715713e165c8231e24d7cae86308bb6354a6933e1db0156b0ab8e8",
+    "approved_for_dev": true,
+    "approved_for_test": false
+  }
+]

@@ -1,0 +1,3 @@
+# Existing environment versions used for the offline UI acceptance.
+gradio==6.31.0
+pydantic==2.14.2

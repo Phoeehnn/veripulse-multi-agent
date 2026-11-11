@@ -1,0 +1,28 @@
+{
+  "research_id": "22222222222222222222222222222222",
+  "execution_mode": "mock",
+  "status": "failed",
+  "agents": [
+    {
+      "role": "fact",
+      "status": "failed",
+      "reason": "synthetic_fixture"
+    },
+    {
+      "role": "propagation",
+      "status": "not_started",
+      "reason": "public_sample:synthetic_fixture"
+    },
+    {
+      "role": "arbiter",
+      "status": "not_started",
+      "reason": "synthetic_fixture"
+    }
+  ],
+  "report": "# 合成失败案例\n\n本夹具模拟材料未通过资格校验后停止调查。未生成事实结论，未调用模型；历史浏览保留失败状态。",
+  "citations": [],
+  "known_cost_cny": "0",
+  "cost_status": "known",
+  "elapsed_ms": 0,
+  "propagation_status": "unavailable"
+}

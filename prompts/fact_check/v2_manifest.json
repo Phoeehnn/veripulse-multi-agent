@@ -1,0 +1,56 @@
+{
+  "status": "approved",
+  "round": "R2",
+  "runtime_registered": true,
+  "approved_for_dev": true,
+  "approved_for_test": false,
+  "author_approval": {
+    "date": "2026-10-21",
+    "scope": "one F2-B1 R2 dev90 paired run, single v4 and loop v2, shared hard cap CNY 6",
+    "source": "author message: 授权运行"
+  },
+  "source_attachment_sha256": "aab21a47b696ce81a86aeca6e6ab43520dceb3223420b9b67980815e1f5253f9",
+  "common_rules_sha256": "d6785f1121ea25ba70d4c273c778366e7cc9d79231b867ec5f23c9a93e20d8f7",
+  "initial_schema_sha256": "44e011d9fd56f08e73dd7b67a9a307d2a83892ddd021d1394127fb5eae8c01ba",
+  "followup_schema_sha256": "9593888841445188d43087992c45585cf19f8f3d8ec1657f7e067b1779f4a4cb",
+  "prompts": [
+    {
+      "path": "prompts/fact_check/single_v4.md",
+      "prompt_sha256": "d9b5b150a83ca8e9afe087209638af5eaa18f5e75e7a8ec6437cadab6900ebf9",
+      "unicode_characters": 3693,
+      "utf8_bytes": 9011,
+      "approved_for_dev": true
+    },
+    {
+      "path": "prompts/fact_check/investigator_v2.md",
+      "prompt_sha256": "e10b431019f912538a586494c4a7f69f0850209d40c6439e352826ba81080790",
+      "unicode_characters": 4381,
+      "utf8_bytes": 10793,
+      "approved_for_dev": true
+    }
+  ],
+  "prior_rounds": [
+    {
+      "round": "R1",
+      "status": "approved",
+      "approved_for_dev": true,
+      "approved_for_test": false,
+      "prompts": [
+        {
+          "path": "prompts/fact_check/single_v4.md",
+          "prompt_sha256": "d86823b46cd12084e040621124ba6bfd90aa8e36c5c6722cc2ad49fd58ab48a2",
+          "unicode_characters": 3507,
+          "utf8_bytes": 8583,
+          "approved_for_dev": true
+        },
+        {
+          "path": "prompts/fact_check/investigator_v2.md",
+          "prompt_sha256": "20750f9c72744f792881d2bcd476894ede22d5a4d3ee379c3ee7103cf510f868",
+          "unicode_characters": 4195,
+          "utf8_bytes": 10365,
+          "approved_for_dev": true
+        }
+      ]
+    }
+  ]
+}

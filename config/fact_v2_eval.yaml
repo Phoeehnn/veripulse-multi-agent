@@ -1,0 +1,8 @@
+# 作者已确认的事实 V2 单节点容量候选；不参与历史 E2 条件。
+input_estimate_version: json-chars-v1
+input_bound_margin_tokens: 300
+token_budget_per_call: 26000
+max_output_tokens: 2000
+final_token_reserve: 28000
+max_total_tokens: 135000
+max_cost_cny: 0.36

@@ -1,0 +1,45 @@
+{
+  "research_id": "11111111111111111111111111111111",
+  "execution_mode": "mock",
+  "status": "completed",
+  "agents": [
+    {
+      "role": "fact",
+      "status": "completed",
+      "reason": "synthetic_fixture"
+    },
+    {
+      "role": "propagation",
+      "status": "completed",
+      "reason": "public_sample:synthetic_fixture"
+    },
+    {
+      "role": "arbiter",
+      "status": "completed",
+      "reason": "synthetic_fixture"
+    }
+  ],
+  "report": "# 合成案例研判报告\n\n> 全部材料与角色结果均为人工编写的展示夹具，未调用模型。\n\n**被核声明：** 示例市图书馆将在周六延长开放至 20:00。\n\n## 事实结论\n示例公告明确写明周六开放时间为 09:00—20:00，材料支持声明。[E1]\n\n## 传播样本附录\n两条合成评论表达了对开放时间调整的关注。其中一条希望延长晚间服务。[W1]\n评论仅展示样本分析，不推算总体传播规模或总体情绪。\n\n## 仲裁结果\n采纳已核验的开放时间信息，建议归档；不将评论态度当作政策事实依据。\n",
+  "citations": [
+    {
+      "citation_id": "fact:E1",
+      "run_id": "11111111111111111111111111111111",
+      "evidence_id": "E1",
+      "quote": "示例市图书馆周六开放时间为09:00—20:00。",
+      "source_label": "合成公告 · 非真实新闻",
+      "validation": "passed"
+    },
+    {
+      "citation_id": "public:W1",
+      "run_id": "11111111111111111111111111111111",
+      "evidence_id": "W1",
+      "quote": "希望晚间也能借阅图书。",
+      "source_label": "合成评论 · 无真实用户",
+      "validation": "passed"
+    }
+  ],
+  "known_cost_cny": "0",
+  "cost_status": "known",
+  "elapsed_ms": 0,
+  "propagation_status": "unavailable"
+}

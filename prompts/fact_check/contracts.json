@@ -1,0 +1,20 @@
+[
+  {
+    "contract_version": "fact-verdict-v3",
+    "path": "prompts/fact_check/v3.md",
+    "prompt_sha256": "5de076f80da3489d651c2dab7cddcea614be19877edffc9b4377dfef1b744dea",
+    "verdict_schema_sha256": "05a61464abef7dba5ef7c298feb3afa0781c611d460fe59d83bcc878d88a6c17",
+    "repair_schema_sha256": "512fcfac4b167a4893ac063a579988b59a61e2a8f3cdd7844d883e166d731540",
+    "approved_for_dev": true,
+    "approved_for_test": true
+  },
+  {
+    "contract_version": "fact-verdict-v3",
+    "path": "experiments/archive/prompts/fact_check/fact_check_v3.suggested.draft.md",
+    "prompt_sha256": "7332f10d6f81d218f2248c2fb7c483a23096de96f2abdde5052772d79ca1e948",
+    "verdict_schema_sha256": "05a61464abef7dba5ef7c298feb3afa0781c611d460fe59d83bcc878d88a6c17",
+    "repair_schema_sha256": "512fcfac4b167a4893ac063a579988b59a61e2a8f3cdd7844d883e166d731540",
+    "approved_for_dev": true,
+    "approved_for_test": false
+  }
+]

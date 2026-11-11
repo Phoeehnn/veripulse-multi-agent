@@ -1,0 +1,8 @@
+-r requirements-demo.txt
+pytest==9.1.1
+pydantic-settings==2.15.0
+PyYAML==6.0.3
+openai==2.54.0
+jieba==0.42.1
+rank-bm25==0.2.2
+chromadb==1.5.9

@@ -1,0 +1,65 @@
+[
+  {
+    "file": "2026-10-07_factcheck_6dcbbcef40604247b043da3898f45a2f.csv",
+    "rows": 60,
+    "sha256": "6b37056409bc992fca9a5fbc0848a5221338e3fb2b84f78aa0868b800a76d2e2",
+    "relevant_columns": [
+      "gold_label",
+      "predicted_label",
+      "correct",
+      "variant"
+    ],
+    "correct": 48,
+    "variant": {
+      "v3.draft.md": 60
+    }
+  },
+  {
+    "file": "2026-10-07_retrieval_f625cfb11a1b4abf943c347464b480e9.csv",
+    "rows": 60,
+    "sha256": "9d6119388ad87c107685a8a81677885c5504c460a7cb05f1dcb40fd5d1fe8d57",
+    "relevant_columns": [
+      "vector_hit_at_k",
+      "bm25_hit_at_k",
+      "hybrid_hit_at_k",
+      "rerank_hit_at_k",
+      "variant"
+    ],
+    "variant": {
+      "corpus=chef_test_full": 60
+    }
+  },
+  {
+    "file": "2026-10-22_factcheck_1e8a97b852144bdeaaf2102ade2d5797.csv",
+    "rows": 120,
+    "sha256": "7bf3b5038d25c1515b44b67acf9aecf51d1c33a61bd86568c7b2b5d5c46ac0fc",
+    "relevant_columns": [
+      "gold_label",
+      "predicted_label",
+      "correct"
+    ],
+    "correct": 90
+  },
+  {
+    "file": "2026-10-22_factcheck_3ad992c87a4c4914bc06fafa2455131a.csv",
+    "rows": 120,
+    "sha256": "44b008dd4c43fa3351281f3ccad95e519b9087996b5c98948fb0f5d8ff11c3d5",
+    "relevant_columns": [
+      "gold_label",
+      "predicted_label",
+      "correct"
+    ],
+    "correct": 87
+  },
+  {
+    "file": "2026-10-22_factcheck_72ee32413a074344b23964c8d74cdbae.csv",
+    "rows": 120,
+    "sha256": "004b84d956bbe2495eeb7037e4d8d38a419ff217baa410e83e4501d21ba582df",
+    "relevant_columns": [
+      "gold_label",
+      "predicted_label",
+      "correct"
+    ],
+    "correct": 92
+  }
+]
