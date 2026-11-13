@@ -1,4 +1,4 @@
-# 项目 A · 证据驱动的多 Agent 舆情研判系统
+# VeriPulse · 证据驱动的多 Agent 舆情研判系统
 
 An evidence-driven multi-agent system for news investigation and risk assessment.  
 Combines fact checking, public-comment analysis, and arbitration with traceable citations.  
