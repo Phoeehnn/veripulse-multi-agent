@@ -4,7 +4,9 @@
 
 ## 一张研判工单的完整流程
 
-[![研判工单完整流程](../assets/investigation-architecture.png)](../assets/investigation-architecture.png)
+[![研判工单完整流程](../assets/investigation-flow-original.png)](../assets/investigation-flow-original.png)
+
+直接采用架构文档内嵌的原始 PNG（1077 × 1208），未经过截图或重新缩放；点击可查看原图。
 
 `prepare` 检查证据覆盖和预算条件，随后调度事实核查与传播分析。`merge_round` 汇合合格结果并建立问题台账，仲裁 Agent 根据台账选择定稿或提出补查、复核动作。程序经 `validate_action` 检查后执行任务，通过 `apply_result` 回填结果和进展，最终进入计分、人工复核及报告生成。
 

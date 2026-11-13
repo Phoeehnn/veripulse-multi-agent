@@ -23,7 +23,9 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 ## 新闻调查工作台
 
-[![VeriPulse 当前新闻调查工作台](assets/current-success.png)](https://phoeehnn.github.io/veripulse-multi-agent/demo/)
+[![VeriPulse 新闻调查工作台 · UI 设计稿](assets/ui-design-b.png)](https://phoeehnn.github.io/veripulse-multi-agent/demo/)
+
+UI 设计稿展示工作台的视觉风格；点击图片可体验当前实现。
 
 左侧集中查看报告、证据和时间线，右侧展示三个 Agent 的执行进度与费用。历史支持成功、失败结果对照，辅助 Trace 默认折叠。实时调查入口整合网页候选审核和评论材料选择，运行期间持续显示已归档的执行状态。
 
@@ -38,7 +40,7 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 ## 一条新闻如何变成报告
 
-[![研判工单完整架构](assets/investigation-architecture.png)](assets/investigation-architecture.png)
+[![研判工单完整架构](assets/investigation-flow-original.png)](assets/investigation-flow-original.png)
 
 图示展示研判工单的完整架构与可配置分支，蓝色节点为模型 Agent，绿色节点为协作程序，橙色为补查与复核，红色为人工审批和告警门卫。图中最多两次动作对应扩展配置；默认配置与真实新闻材料接入方式见 [架构说明](docs/ARCHITECTURE.md)。点击图片可查看原图。
 
@@ -81,15 +83,15 @@ YouTube 样本报告作为独立附录展示，保留时间窗与材料范围；
 
 | 模块 | 实现 |
 |---|---|
-| 流程编排 | LangGraph，`src/yuqing/graph/` |
-| 专家角色 | `src/yuqing/agents/` |
-| 工具、预算、证据资格 | `src/yuqing/harness/` |
-| 协作与补查 | `src/yuqing/collab/` |
-| 模型和外部请求边界 | `src/yuqing/llm.py` |
-| 调查服务与 Gradio | `src/yuqing/serve/` |
-| 评测 | `src/yuqing/eval/` |
-| 结构化验证 | Pydantic |
-| 状态和费用持久化 | SQLite |
+| 流程编排 | LangGraph，[graph/](src/yuqing/graph/) |
+| 专家角色 | [agents/](src/yuqing/agents/) |
+| 工具、预算、证据资格 | [harness/](src/yuqing/harness/) |
+| 协作与补查 | [collab/](src/yuqing/collab/) |
+| 模型和外部请求边界 | [llm.py](src/yuqing/llm.py) |
+| 调查服务与 Gradio | [serve/](src/yuqing/serve/) |
+| 评测与历史实验 | [eval/](src/yuqing/eval/)、[experiments/archive/](experiments/archive/) |
+| 结构化验证 | Pydantic，[schemas.py](src/yuqing/schemas.py)（报告与数据合同）、[harness/tools.py](src/yuqing/harness/tools.py)（工具参数） |
+| 状态和费用持久化 | SQLite，[serve/store.py](src/yuqing/serve/store.py)（工单与审批）、[eval/experiment_budget_store.py](src/yuqing/eval/experiment_budget_store.py)（费用账本） |
 
 ## 离线测试
 
