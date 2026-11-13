@@ -12,7 +12,7 @@
 
 ## 合成演示
 
-`examples/synthetic/history` 全部为人工编写，不来自真实用户或新闻；`assets/current-success.png` 与 `assets/current-failure.png` 是当前 Gradio 页面实际截图，替代 README 中的旧版图片。`docs/demo/` 是同一页面导出的静态交互演示，支持历史切换及报告、证据、时间线浏览，不连接调查后端。角色完成状态、引文资格及零费用为展示字段，不能作为本轮模型运行成绩。无外部引文链接和真实身份。旧截图保留作历史素材。
+`examples/synthetic/history` 来自真实用户或新闻；`assets/current-success.png` 与 `assets/current-failure.png` 是当前 Gradio 页面实际截图，替代 README 中的旧版图片。`docs/demo/` 是同一页面导出的静态交互演示，支持历史切换及报告、证据、时间线浏览，不连接调查后端。角色完成状态、引文资格及零费用为展示字段，不能作为本轮模型运行成绩。无外部引文链接和真实身份。旧截图保留作历史素材。
 
 ## 来源与发布范围
 
