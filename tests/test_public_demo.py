@@ -32,6 +32,8 @@ class PublicDemoTests(unittest.TestCase):
         choices, selected = history.choices()
         self.assertEqual(len(choices), 2)
         self.assertEqual(selected, "1" * 32)
+        self.assertEqual({identity for _, identity in choices}, {"1" * 32, "2" * 32})
+        self.assertTrue(all(identity[:8] not in label for label, identity in choices))
         view = history.load("2" * 32)
         self.assertIn("failed", view[0])
         self.assertNotIn("completed", view[1])

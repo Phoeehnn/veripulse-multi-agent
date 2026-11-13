@@ -27,7 +27,7 @@ class ResearchHistory:
             status = {"completed": "已完成", "failed": "失败", "interrupted": "中断"}.get(snapshot.status, snapshot.status)
             mode = {"live": "真实", "mock": "Mock", "historical_replay": "回放"}[snapshot.execution_mode]
             mode = "仅样本增量 · " + mode if (folder / "sample-increment.json").exists() else mode
-            label = f"{mode} · {status} · {request.input_value[:32]} · {folder.name[:8]}"
+            label = f"{mode} · {status} · {request.input_value[:32]}"
             records.append((time, label, folder.name, snapshot.status))
         records.sort(reverse=True)
         if len(self.roots) > 1:
