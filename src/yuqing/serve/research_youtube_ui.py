@@ -3,11 +3,12 @@ from dataclasses import dataclass, field
 from hashlib import sha256
 import json
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 import subprocess
 from time import monotonic
 from uuid import uuid4
+from src.yuqing.retrieval.web_contracts import SearchCandidate
 from src.yuqing.serve.research_contracts import ResearchRequest
 from src.yuqing.serve.research_frontend import render_case
 
@@ -91,27 +92,79 @@ class YoutubeInvestigationUI:
         return render_case(case,elapsed,finished=True)
 
 
-def bind_youtube_investigation(gr: object, service: YoutubeInvestigationUI, news: object, outputs: list) -> None:
+def bind_youtube_investigation(gr: object, service: YoutubeInvestigationUI, news: object, outputs: list,
+                               *, create_button: object | None = None) -> None:
     """Bind one news input to query, selection and the existing report display."""
-    with gr.Accordion('YouTube 评论与新闻调查',open=True):
-        gr.Markdown('先建立案件并查询候选，核对后选用或跳过。外部查询与模型分析分别需要本案授权。')
-        create = gr.Button('1. 用上方新闻建立案件')
-        identity = gr.Textbox(label='当前案件',interactive=False)
+    with gr.Accordion('调查设置与材料审核',open=False):
+        gr.Markdown('先建立案件，再确认事实核查用的网页和传播分析用的评论。查询与模型分析各自需要本案许可。')
+        create = create_button if create_button is not None else gr.Button('建立调查', variant='primary')
+        identity = gr.Textbox(label='案件编号',interactive=False)
+        reset_web = bind_web_review(gr, service, identity, outputs)
+        gr.Markdown('### YouTube 评论\n核对候选视频和时间窗内的评论，再选择是否用于传播分析。')
         word = gr.Textbox(label='评论查询词（与原新闻分开保存）')
         with gr.Row():
             first = gr.Textbox(label='开始日（北京时间 YYYY-MM-DD）')
             last = gr.Textbox(label='结束日（含当天）')
-        query = gr.Button('2. 申请或执行获准查询')
+        gr.Markdown('填写关键词和时间范围，查询与这条新闻有关的公开评论。')
+        query = gr.Button('查询公开评论')
         preview = gr.JSON(label='候选视频、原评论链接与窗内样本')
         use = gr.Checkbox(label='选用这些评论；取消勾选表示跳过',value=True)
-        select = gr.Button('3. 确认选用或跳过')
+        select = gr.Button('确认样本选择')
         status = gr.Markdown()
-        run = gr.Button('4. 执行获准调查并显示报告',variant='primary')
+        gr.Markdown('确认材料后，生成包含结论、依据和原文引用的报告。')
+        run = gr.Button('生成研判报告',variant='primary')
     create_page, query_page, select_page, run_page = page_actions(service)
-    create.click(create_page,inputs=news,outputs=[identity,preview,status,*outputs],api_name='youtube_create')
+    created = create.click(create_page,inputs=news,outputs=[identity,preview,status,*outputs],api_name='youtube_create')
+    created.then(*reset_web, api_name=False)
     query.click(query_page,inputs=[identity,word,first,last],outputs=[preview,status,*outputs],api_name='youtube_query')
     select.click(select_page,inputs=[identity,use],outputs=[status,*outputs],api_name='youtube_select')
     run.click(run_page,inputs=identity,outputs=outputs,api_name='youtube_run',concurrency_limit=1)
+
+
+def bind_web_review(gr: object, service: YoutubeInvestigationUI, identity: object, outputs: list) -> tuple:
+    """Expose search and review through the case-bound worker actions."""
+    gr.Markdown('### Tavily 网页候选\n核对标题、摘要与网址，选出与新闻相关的网页。正文在获准生成报告后提取。')
+    with gr.Row():
+        keyword = gr.Textbox(label='网页查询词')
+        limit = gr.Textbox(label='本场共享预算上限（元）', placeholder='填写申请或许可中的金额')
+    search = gr.Button('查询网页候选')
+    candidates = gr.JSON(label='网页标题、摘要与网址')
+    urls = gr.CheckboxGroup(label='选用的网页', choices=[])
+    reason = gr.Textbox(label='相关性审核说明', placeholder='说明选中的网页与本案有何关联')
+    confirm = gr.Button('确认网页选择')
+    status = gr.Markdown()
+
+    def search_page(case: str, query: str, limit_cny: str) -> tuple:
+        """Present candidates from the current search receipt and clear prior choices."""
+        try:
+            result = service.worker(case, dict(action='web_search', query=query, limit_cny=limit_cny))
+            rows = [SearchCandidate(url=row['url'], title=row['title'], snippet=row['content'])
+                    for row in result.get('candidates', [])]
+        except (ValueError, OSError, KeyError):
+            result, rows = dict(message='网页查询未完成，请核对案件、查询词、预算和许可。'), []
+        data = [row.model_dump(mode='json') for row in rows]
+        choices = [(f'{row.title} · {row.url}', str(row.url)) for row in rows]
+        message = '请核对候选网页并填写审核说明。' if rows else '本次没有可审核的网页候选。'
+        return data, gr.update(choices=choices, value=[]), '', result.get('message', message), '', '', '', '', '', {}
+
+    def confirm_page(case: str, chosen: list[str], note: str) -> tuple:
+        """Persist the human decision via the worker and require a separately pinned model grant."""
+        try:
+            result = service.worker(case, dict(action='web_select', urls=chosen, reason=note))
+            message = ('网页审核已归档，等待绑定该选择的模型许可。' if result['status'] == 'waiting_model_approval'
+                       else result.get('message', '网页选择未保存。'))
+        except (ValueError, OSError, KeyError):
+            message = '网页选择未保存，请核对本案候选和审核说明。'
+        return message, '', '', '', '', '', {}
+
+    def reset_page() -> tuple:
+        """Clear the previous case's web review when a new case is created."""
+        return '', '', None, gr.update(choices=[], value=[]), '', ''
+
+    search.click(search_page, inputs=[identity, keyword, limit],
+                 outputs=[candidates, urls, reason, status, *outputs], api_name='web_search')
+    confirm.click(confirm_page, inputs=[identity, urls, reason], outputs=[status, *outputs], api_name='web_select')
+    return reset_page, None, [keyword, limit, candidates, urls, reason, status]
 
 
 def page_actions(service: YoutubeInvestigationUI) -> tuple:
@@ -135,10 +188,11 @@ def page_actions(service: YoutubeInvestigationUI) -> tuple:
             return service.select(case,use),'','','','','',{}
         except (ValueError, OSError, KeyError):
             return '尚无可选用的完整查询归档，请先完成查询。','','','','','',{}
-    def run_page(case: str) -> tuple:
+    def run_page(case: str) -> object:
         """Clear stale reports when selection or execution is refused."""
         try:
-            return service.generate(case)
+            from src.yuqing.serve.research_progress_ui import stream_operation
+            yield from stream_operation(service.case(case), lambda: service.generate(case))
         except (ValueError, OSError, KeyError):
-            return '调查未启动或未完成，请核对选择和许可。','','','','',{}
+            yield '调查未启动或未完成，请核对选择和许可。','','','','',{}
     return create_page, query_page, select_page, run_page

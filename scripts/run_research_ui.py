@@ -38,7 +38,7 @@ def launch_research_ui() -> None:
         from src.yuqing.serve.research_youtube_ui import YoutubeInvestigationUI
         run_root = worktree / "traces/youtube-investigations"
         investigation = YoutubeInvestigationUI(worktree, run_root, arguments.youtube_approvals or run_root / "authorizations.json")
-    app = create_research_ui(catalog, youtube_investigation=investigation, history_root=investigation.root if investigation else None, resume_source=source, youtube_case_root=(worktree / "traces/tmp" / ("youtube-case-ui-" + uuid4().hex)) if arguments.youtube_case_replay else None, youtube_replay=arguments.youtube_replay, youtube_lookup=arguments.youtube_lookup, core_python=None if arguments.read_only or arguments.youtube_lookup or arguments.youtube_case_replay or arguments.youtube_investigation else Path(sys.executable))
+    app = create_research_ui(catalog, youtube_investigation=investigation, history_root=investigation.root if investigation else None, featured_history_root=(worktree / "examples/synthetic/history") if investigation else None, resume_source=source, youtube_case_root=(worktree / "traces/tmp" / ("youtube-case-ui-" + uuid4().hex)) if arguments.youtube_case_replay else None, youtube_replay=arguments.youtube_replay, youtube_lookup=arguments.youtube_lookup, core_python=None if arguments.read_only or arguments.youtube_lookup or arguments.youtube_case_replay or arguments.youtube_investigation else Path(sys.executable))
     app.launch(server_name="127.0.0.1", server_port=arguments.port, share=False,
         inbrowser=False, show_error=True, css=_css(), theme=gr.themes.Soft())
 

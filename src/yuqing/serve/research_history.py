@@ -11,18 +11,15 @@ from src.yuqing.serve.research_frontend import _rows, _cost_label, render_case
 class ResearchHistory:
     """Resolve only run IDs under the supplied archive root; never execute investigations."""
 
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, *, featured_root: Path | None = None) -> None:
         """Bind the archive root without creating directories or opening any wallet."""
         self.root = root.resolve()
+        self.roots = (self.root, featured_root.resolve()) if featured_root is not None else (self.root,)
 
     def choices(self) -> tuple[list[tuple[str, str]], str | None]:
         """List successful and failed runs, preferring the newest completed result initially."""
         records = []
-        for folder in self.root.iterdir() if self.root.exists() else ():
-            if not re.fullmatch(r"[0-9a-f]{32}", folder.name) or folder.resolve().parent != self.root:
-                continue
-            if not (folder / "snapshot.json").is_file():
-                continue
+        for folder in self._folders().values():
             snapshot = ResearchSnapshot.model_validate_json((folder / "snapshot.json").read_bytes())
             request = ResearchRequest.model_validate_json((folder / "request.json").read_bytes())
             rows = _rows(folder / "stages.jsonl")
@@ -33,15 +30,29 @@ class ResearchHistory:
             label = f"{mode} · {status} · {request.input_value[:32]} · {folder.name[:8]}"
             records.append((time, label, folder.name, snapshot.status))
         records.sort(reverse=True)
+        if len(self.roots) > 1:
+            records = [row for status in ("completed", "failed")
+                       if (row := next((item for item in records if item[3] == status), None)) is not None]
         selected = next((row[2] for row in records if row[3] == "completed"), records[0][2] if records else None)
         return [(row[1], row[2]) for row in records], selected
+
+    def _folders(self) -> dict[str, Path]:
+        """Index finished snapshots under the configured roots, preferring the local copy."""
+        cases = {}
+        for root in self.roots:
+            for folder in root.iterdir() if root.is_dir() else ():
+                if (re.fullmatch(r"[0-9a-f]{32}", folder.name) and folder.resolve().parent == root
+                        and (folder / "snapshot.json").is_file()):
+                    cases.setdefault(folder.name, folder)
+        return cases
 
     def find_statement(self, text: str) -> str | None:
         """Prefer an existing completed result for the same exact trimmed statement."""
         choices, _ = self.choices()
+        cases = self._folders()
         matched = []
         for _, identity in choices:
-            case = self.root / identity
+            case = cases[identity]
             if (case / "sample-increment.json").exists():
                 continue
             request = ResearchRequest.model_validate_json((case / "request.json").read_bytes())
@@ -59,9 +70,9 @@ class ResearchHistory:
                     "暂无执行事件。", "尚无引文。", "输入新闻后可开始调查。", {})
         if not re.fullmatch(r"[0-9a-f]{32}", research_id):
             raise ValueError("invalid_archived_run_id")
-        case = (self.root / research_id).resolve()
-        if case.parent != self.root:
-            raise ValueError("archived_run_outside_root")
+        case = self._folders().get(research_id)
+        if case is None:
+            raise ValueError("archived_run_not_found")
         snapshot = ResearchSnapshot.model_validate_json((case / "snapshot.json").read_bytes())
         rendered = render_case(case, 0, finished=True)
         rows = _rows(case / "stages.jsonl")

@@ -8,6 +8,14 @@ from src.yuqing.serve.research_contracts import ResearchEvent, ResearchSnapshot
 def public_report_view(snapshot: ResearchSnapshot) -> str:
     """Show explicit missing archival data for old histories without reconstructing a report."""
     report = snapshot.report or "未产生合格报告。"
+    main, heading, appendix = report.partition("\n### 附录：公开传播材料样本分析\n")
+    if heading:
+        # Older archives escaped the entity's '#' as Markdown, making it visible as text.
+        lines = appendix.splitlines(keepends=True)
+        for index, line in enumerate(lines):
+            if line.startswith(("- [W", "  原文：", "- 待解决：")):
+                lines[index] = line.replace(r"&\#x27;", "'")
+        report = main + heading + "".join(lines)
     if not any((item.reason or "").startswith("public_sample:") for item in snapshot.agents):
         report += ("\n\n### 附录：公开传播材料样本分析\n\n"
                    "样本任务：未运行或未归档（旧快照无此记录），不重建结果。\n\n"

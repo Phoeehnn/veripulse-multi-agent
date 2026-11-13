@@ -62,7 +62,11 @@ def render_case(case: Path, elapsed: float, *, finished: bool = False) -> tuple:
         status = "调查未完成，请检查配置与执行日志；未生成结论。"
         agents = {role: "interrupted" if state == "running" else state for role, state in agents.items()}
     cost = _cost_label(case)
-    cards = " · ".join(f"**{label}** `{agents[role]}`" for role, label in (("fact", "事实 Agent"), ("propagation", propagation_label), ("arbiter", "仲裁 Agent")))
+    cards = "\n\n".join(f"**{label}** {_role_status(agents[role])}  \n{description}" for role, label, description in (
+        ("fact", "事实 Agent", "核对声明与原始证据。"),
+        ("propagation", propagation_label, "分析本案收集的传播样本。"),
+        ("arbiter", "仲裁 Agent", "综合调查结果并说明限制。"),
+    ))
     cards += "\n\n总体传播规模：`unavailable` · 总体情绪：`unavailable` · 样本分析不计入全网风险"
     return (f"**实时调查** · {escape(str(status))} · {elapsed:.1f}s · {escape(cost)}",
             cards, "\n".join(timeline[-30:]) or "暂无执行事件。", sources, report, detail)
@@ -147,3 +151,10 @@ def _existing_statement(root: Path, text: str) -> tuple | None:
         return None
     result = history.load(identity)
     return ("**已打开相同声明的历史结果，未重复调用API。**\n\n" + result[0], *result[1:])
+
+
+def _role_status(status: str) -> str:
+    """Translate observed states and animate only roles with actual running events."""
+    names = dict(not_started="等待开始", running="正在处理", completed="已完成", failed="失败", interrupted="已中断", unavailable="暂无可用结果")
+    marker = '<span class="activity-dot"></span> ' if status == 'running' else ''
+    return marker + names.get(status, status) + ' · ' + status

@@ -19,6 +19,14 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 项目以 Python 和 LangGraph 构建调查流程，通过 Gradio 提供新闻工作台，将事实核查、传播样本分析和仲裁分工协作。设计重点是让每个结论有材料依据、每次调查有执行边界、每笔模型调用有可核对的记录。
 
+## 新闻调查工作台
+
+![VeriPulse 新闻调查工作台 UI 设计稿](assets/ui-design-b.png)
+
+*B 稿 UI 设计图，展示界面布局与视觉风格；图中文字和案例为设计示意。*
+
+新版工作台采用橄榄绿侧栏与暖白报告区，左侧集中查看报告、证据和时间线，右侧展示三个 Agent 的执行进度与费用。历史支持成功、失败结果对照，辅助 Trace 默认折叠。实时调查入口整合网页候选审核和评论材料选择，运行期间持续显示已归档的执行状态。
+
 ## 核心能力
 
 - **真实新闻调查**：接入 Tavily 搜索与正文提取、YouTube 视频与评论查询，保留材料来源、采集时间窗和原始链接。
@@ -105,7 +113,9 @@ YouTube 样本报告作为独立附录展示，保留时间窗与材料范围；
 
 先运行无需密钥的 [合成演示](docs/QUICKSTART.md)：使用现有 Gradio 页面浏览成功、失败案例，查看角色结果、E/W 引文和报告。
 
-![合成报告界面](assets/synthetic-report.png)
+以下两张为此前版本的实际运行截图，最新版视觉见上方 UI 设计图及本地合成演示。
+
+![此前版本的合成报告界面](assets/synthetic-report.png)
 
 真实新闻链路的脱敏展示副本：
 
