@@ -25,8 +25,6 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 [![VeriPulse 新闻调查工作台 · UI 设计稿](assets/ui-design-b.png)](https://phoeehnn.github.io/veripulse-multi-agent/demo/)
 
-UI 设计稿展示工作台的视觉风格；点击图片可体验当前实现。
-
 左侧集中查看报告、证据和时间线，右侧展示三个 Agent 的执行进度与费用。历史支持成功、失败结果对照，辅助 Trace 默认折叠。实时调查入口整合网页候选审核和评论材料选择，运行期间持续显示已归档的执行状态。
 
 ## 核心能力
