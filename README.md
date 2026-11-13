@@ -36,21 +36,9 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 ## 一条新闻如何变成报告
 
-```mermaid
-flowchart TD
-    A[Gradio 输入新闻] --> B[许可与候选相关性确认]
-    B --> C[Tavily 网页取证]
-    B --> D[YouTube 评论样本]
-    C --> E[事实 Agent]
-    D --> F[传播 Agent]
-    E --> G[仲裁 Agent]
-    G --> H[程序校验与风险计分]
-    H --> I[报告与 E/W 引用展示]
-    F --> I
-    J[同案账本与请求审计] -.-> E
-    J -.-> F
-    J -.-> G
-```
+[![研判工单完整架构](assets/investigation-architecture.png)](assets/investigation-architecture.png)
+
+图示展示研判工单的完整架构与可配置分支，蓝色节点为模型 Agent，绿色节点为协作程序，橙色为补查与复核，红色为人工审批和告警门卫。图中最多两次动作对应扩展配置；默认配置与真实新闻材料接入方式见 [架构说明](docs/ARCHITECTURE.md)。点击图片可查看原图。
 
 YouTube 样本报告作为独立附录展示，保留时间窗与材料范围；总体传播规模、总体情绪不由单视频评论推算。仲裁与计分按现有材料合同执行。
 
