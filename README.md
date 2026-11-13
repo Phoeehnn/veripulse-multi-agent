@@ -4,6 +4,8 @@ An evidence-driven multi-agent system for news investigation and risk assessment
 Combines fact checking, public-comment analysis, and arbitration with traceable citations.  
 Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled execution.
 
+**[打开在线 Demo](https://phoeehnn.github.io/veripulse-multi-agent/demo/)** · [本地运行与实时调查](docs/QUICKSTART.md) · [架构说明](docs/ARCHITECTURE.md)
+
 ## 关键结果
 
 | 场景 | 结果 | 指标含义与评测范围 |
@@ -21,7 +23,7 @@ Built with Python, LangGraph, Gradio, and a shared budget ledger for controlled 
 
 ## 新闻调查工作台
 
-![VeriPulse 新闻调查工作台 UI 设计稿](assets/ui-design-b.png)
+[![VeriPulse 当前新闻调查工作台](assets/current-success.png)](https://phoeehnn.github.io/veripulse-multi-agent/demo/)
 
 左侧集中查看报告、证据和时间线，右侧展示三个 Agent 的执行进度与费用。历史支持成功、失败结果对照，辅助 Trace 默认折叠。实时调查入口整合网页候选审核和评论材料选择，运行期间持续显示已归档的执行状态。
 
@@ -97,17 +99,19 @@ YouTube 样本报告作为独立附录展示，保留时间窗与材料范围；
 
 ## 体验工作台
 
-先运行无需密钥的 [合成演示](docs/QUICKSTART.md)：使用现有 Gradio 页面浏览成功、失败案例，查看角色结果、E/W 引文和报告。
+**[点击进入在线工作台 →](https://phoeehnn.github.io/veripulse-multi-agent/demo/)** 无需安装或密钥，即可切换成功、失败案例，查看报告、证据来源、时间线，以及三个 Agent 的状态和费用。
 
-以下两张为此前版本的实际运行截图，最新版视觉见上方 UI 设计图及本地合成演示。
+在线版沿用当前 Gradio 前端的布局，是合成案例的交互展示，不发起模型或搜索请求。输入新闻进行实时调查，请按 [快速开始](docs/QUICKSTART.md) 启动完整前端，并配置数据源、案件许可与预算。
 
-![此前版本的合成报告界面](assets/synthetic-report.png)
+**成功案例：**左侧阅读完整报告与 E/W 引文，右侧查看角色结果和调用记录。
 
-真实新闻链路的脱敏展示副本：
+![当前前端：合成成功案例](assets/current-success.png)
 
-![真实验收脱敏展示](assets/live-redacted.png)
+**失败案例：**保留失败状态和已记录信息，帮助理解调查在哪里停止。
 
-截图来源、实验口径及公开材料说明见 [验收证据](docs/EVIDENCE.md)。合成演示不调用模型；真实调查按案件许可与预算控制运行。
+![当前前端：合成失败案例](assets/current-failure.png)
+
+两张图片均为当前前端的实际截图。展示材料与真实验收记录分别说明，见 [验收证据](docs/EVIDENCE.md)。
 ## License
 
 [MIT](LICENSE) · Copyright © 2026 Phoeehnn
